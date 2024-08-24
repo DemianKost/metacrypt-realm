@@ -7,8 +7,8 @@
                 v-for="frog in frogs"
                 :key="frog.id"
                 class="frog-card"
-                :class="{ selected: selectedFrog === frog.id }"
-                @click="selectFrog(frog.id)"
+                :class="{ selected: selectedFrog === frog }"
+                @click="selectFrog(frog)"
             >
                 <img :src="frog.image" :alt="frog.name" class="frog-image" />
                 <p class="frog-name">{{ frog.name }}</p>
@@ -16,41 +16,38 @@
         </div>
       
         <div class="text-center mt-6">
-            <button
+            <RouterLink
                 :disabled="!selectedFrog"
-                @click="confirmSelection"
                 class="bg-red-700 text-md uppercase rounded-full px-4 py-2"
+                to="/game/lobby"
             >
-            Confirm selection
-            </button>
+                Confirm selection
+            </RouterLink>
         </div>
     </div>
 </template>
   
 <script>
-  export default {
-    name: 'SelectFrog',
-    data() {
-      return {
-        frogs: [
-          { id: 1, name: 'Coal frog', image: '/frogs/black_frog.png' },
-          { id: 2, name: 'Freeze frog', image: '/frogs/blue_frog.png' },
-          { id: 3, name: 'Fire frog', image: '/frogs/fire_frog.png' },
-          { id: 4, name: 'Jungle frog', image: '/frogs/green_frog.png' },
-        ],
-        selectedFrog: null
-      };
-    },
-    methods: {
-      selectFrog(id) {
-        this.selectedFrog = id;
-      },
-      confirmSelection() {
-        alert(`You have selected frog with ID: ${this.selectedFrog}`);
-        // Add your logic here for confirming the selection
-      }
-    }
-  };
+    export default {
+        name: 'SelectFrog',
+        data() {
+            return {
+                frogs: [
+                    { id: 1, name: 'Coal frog', image: '/frogs/black_frog.png' },
+                    { id: 2, name: 'Freeze frog', image: '/frogs/blue_frog.png' },
+                    { id: 3, name: 'Fire frog', image: '/frogs/fire_frog.png' },
+                    { id: 4, name: 'Jungle frog', image: '/frogs/green_frog.png' },
+                ],
+                selectedFrog: null
+            };
+        },
+        methods: {
+            selectFrog(frog) {
+                this.selectedFrog = frog;
+                this.$store.commit('setSelectedFrog', frog);
+            }
+        }
+    };
   </script>
   
   <style scoped>
@@ -59,7 +56,7 @@
     justify-content: space-around;
     flex-wrap: wrap;
   }
-  
+
   .frog-card {
     width: 120px;
     padding: 10px;
